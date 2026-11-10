@@ -182,7 +182,7 @@ const sb=cfg.SUPABASE_URL&&cfg.SUPABASE_ANON_KEY?supabase.createClient(cfg.SUPAB
 if(!sb){$("setup").hidden=false;$("bookBtn").disabled=true}
 const inr=n=>"₹"+Number(n).toLocaleString("en-IN");
 const fmt=d=>new Date(d+(d.length===10?"T10:00:00":"")).toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"});
-const STEPS={booked:"Booked",pickup_assigned:"Driver assigned",picked_up:"Picked up",at_origin_hub:"At origin hub",in_transit:"In transit",at_destination_hub:"At destination hub",out_for_delivery:"Out for delivery",delivered:"Delivered",cancelled:"Cancelled"};
+const STEPS={booked:"Booked",pickup_assigned:"Driver assigned",driver_accepted:"Driver on the way",picked_up:"Picked up",at_origin_hub:"At origin hub",in_transit:"In transit",at_destination_hub:"At destination hub",out_for_delivery:"Out for delivery",delivered:"Delivered",cancelled:"Cancelled"};
 const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
 $("pDate").value=today();$("pDate").min=today();
 
@@ -277,7 +277,7 @@ $("tf").addEventListener("submit",async e=>{
   if(error){$("tErr").textContent=error.message;return}
   if(!data){$("tErr").textContent="No parcel with that AWB. Check the number and try again.";return}
   const seen=new Map(data.events.map(ev=>[ev.status,ev.at]));
-  const order=["booked","pickup_assigned","picked_up","at_origin_hub","in_transit","at_destination_hub","out_for_delivery","delivered"];
+  const order=["booked","pickup_assigned","driver_accepted","picked_up","at_origin_hub","in_transit","at_destination_hub","out_for_delivery","delivered"];
   $("tOut").innerHTML=`<p><b>${STEPS[data.status]}</b> · ${data.from_pincode} → ${data.to_pincode} · ${data.charged_kg} kg</p>
    <p class="muted">${data.status==="delivered"?"Delivered.":"Expected by "+fmt(data.eta_date)}</p>
    <ul class="tl">${order.map(s=>`<li class="${seen.has(s)?"done":""}">${STEPS[s]}${seen.has(s)?`<span>${new Date(seen.get(s)).toLocaleString("en-IN",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</span>`:""}</li>`).join("")}</ul>`;
