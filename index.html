@@ -280,6 +280,7 @@ $("tf").addEventListener("submit",async e=>{
   const order=["booked","pickup_assigned","driver_accepted","picked_up","at_origin_hub","in_transit","at_destination_hub","out_for_delivery","delivered"];
   $("tOut").innerHTML=`<p><b>${STEPS[data.status]}</b> · ${data.from_pincode} → ${data.to_pincode} · ${data.charged_kg} kg</p>
    <p class="muted">${data.status==="delivered"?"Delivered.":"Expected by "+fmt(data.eta_date)}</p>
+   ${data.from_warehouse?`<p class="muted">Route: ${data.from_warehouse} → ${data.to_warehouse||"destination warehouse"}</p>`:""}
    <ul class="tl">${order.map(s=>`<li class="${seen.has(s)?"done":""}">${STEPS[s]}${seen.has(s)?`<span>${new Date(seen.get(s)).toLocaleString("en-IN",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</span>`:""}</li>`).join("")}</ul>`;
 });
 show();
